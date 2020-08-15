@@ -1,0 +1,20 @@
+{
+  "name": "hashmoment1",
+  "version": "1.0.0",
+  "description": "для докера и кубов второй проект",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "moment": "^2.27.0"
+  },
+  "repository": "https://github.com/GossJS/hashmoment1/",
+  "author": "GossJS",
+  "license": "ISC"
+}
