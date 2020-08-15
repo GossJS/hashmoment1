@@ -1,6 +1,8 @@
 const [{ Server: h1 }, x] = [require('http'), require('express')];
 const crypto = require('crypto');
 
+const moment = require('moment');
+
 const [Router, SummerRouter] = [x.Router(), x.Router()];
 const PORT = 4321;
 const { log } = console;
@@ -21,18 +23,28 @@ function summer(r, sum) {
 Router
   .route('/')
   .get(r => r.res.end('Привет мир!'));
-SummerRouter
-  .route('/')
+
+ApiRouter
+  .route('/sha1/:src')
   .all(r => {
-      const sum = Number(r.query.n1) + Number(r.query.n2);
-      return summer(r, sum);
+    const shasum = crypto.createHash('sha1');
+    shasum.update(r.params.src);
+
+    const reply = { 'Content-Type': 'application/json' },
+    resp = {'sha1': shasum.digest('hex')};
+
+    r.res.set(reply).send(resp);
   });
-SummerRouter
-  .route('/:n1/:n2')
+
+Api2Router
+  .route('/moment')
   .all(r => {
-      const sum = Number(r.params.n1) + Number(r.params.n2);
-      return summer(r, sum);
+    const z = moment().format('DD.MM.YYYY HH:mm:ss');
+    r.res
+    .set({ 'Content-Type': 'text/plain; charset=utf-8' })
+    .send(`Hello, ${r.body.name}, сейчас ${z}`);
   });
+
 app
   .use('/summer', ApiRouter)
   .use((r, rs, n) => rs.status(200).set(hu) && n())
@@ -47,27 +59,5 @@ module.exports = h1(app)
   .listen(process.env.PORT || PORT, () => log(process.pid));
 
 
-
-
-
-
-
-.get('/api/sha1/:src', r => {
-    
-
-    const shasum = crypto.createHash('sha1');
-    shasum.update(r.params.src);
-
-    const reply = { 'Content-Type': 'application/json' },
-    resp = {'sha1': shasum.digest('hex')};
-
-    r.res.set(reply).send(resp);
-})
-
-.post('/api2/moment', r => {
-  const z = moment().format('DD.MM.YYYY HH:mm:ss');
-  r.res
-  .set({ 'Content-Type': 'text/plain; charset=utf-8' })
-  .send(`Hello, ${r.body.name}, сейчас ${z}`);
-})
+ 
 
