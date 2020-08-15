@@ -1,6 +1,5 @@
 const [{ Server: h1 }, x] = [require('http'), require('express')];
 const crypto = require('crypto');
-
 const moment = require('moment');
 
 const [Router, SummerRouter] = [x.Router(), x.Router()];
@@ -13,13 +12,7 @@ const CORS = {
       'Access-Control-Allow-Headers':'cors,my,Content-Type,Accept,Access-Control-Allow-Headers'
 };
 const app = x();
-function summer(r, sum) {
-      if ('cors' in r.query) r.res.set(CORS);
-      r.res.format({
-        'text/html': () => r.res.send(`<h2>Сумма:<i>${sum}</i></h2>`),
-        'application/json': () => r.res.json({"Сумма:": sum})
-      });  
-}
+
 Router
   .route('/')
   .get(r => r.res.end('Привет мир!'));
