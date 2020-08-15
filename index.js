@@ -1,5 +1,6 @@
 const [{ Server: h1 }, x] = [require('http'), require('express')];
 const crypto = require('crypto');
+const bodyParser = require('body-parser');
 const moment = require('moment');
 
 const [Router, ApiRouter, Api2Router] = [x.Router(), x.Router(), x.Router()];
@@ -31,15 +32,18 @@ ApiRouter
 
 Api2Router
   .route('/moment')
-  .all(r => {
+  .post(r => {
     const z = moment().format('DD.MM.YYYY HH:mm:ss');
+    const { name = 'Unknown' } = r.body;  
     r.res
     .set({ 'Content-Type': 'text/plain; charset=utf-8' })
-    .send(`Hello, ${r.body.name}, сейчас ${z}`);
+    .send(`Hello, ${name}, сейчас ${z}`);
   });
 
 app
-  .use('/summer', ApiRouter)
+  .use(bodyParser.urlencoded({ extended: true }))
+  .use(bodyParser.json())
+  .use('/api', ApiRouter)
   .use((r, rs, n) => rs.status(200).set(hu) && n())
   .use(x.static('.'))
   .use('/', Router)
